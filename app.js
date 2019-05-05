@@ -38,18 +38,69 @@ guessBtn.addEventListener("click", function() {
 
   // Check if won
   if (guess === winningNum) {
+    // Game over - Won
+    gameOver(true, `${winningNum} is correct, You WIN the game !!!`);
     // Disable Input
-    guessInput.disabled = true;
-
-    // Change the border color
-    guessInput.style.borderColor = "green";
-    guessInput.style.borderWidth = "2px";
-
-    // Set the message
-    setMessage(`${winningNum} is correct, You WIN the game !!!`, "green");
+    // guessInput.disabled = true;
+    // // Change the border color
+    // guessInput.style.borderColor = "green";
+    // guessInput.style.borderWidth = "2px";
+    // // Set the message
+    // setMessage(`${winningNum} is correct, You WIN the game !!!`, "green");
   } else {
+    // Wrong number
+    guessesLeft -= 1;
+
+    if (guessesLeft === 0) {
+      // Game over - Lost
+
+      // guessInput.disabled = true;
+
+      // // Change the border color
+      // guessInput.style.borderColor = "red";
+      // guessInput.style.borderWidth = "2px";
+
+      // // Set the message
+      // setMessage(
+      //   `Game Over... You Lost the game. The correct number was ${winningNum}`,
+      //   "red"
+      // );
+
+      gameOver(
+        false,
+        `Game Over... You Lost the game. The correct number was ${winningNum}`
+      );
+    } else {
+      // Game continues -answer wrong
+
+      // Change the border color
+      guessInput.style.borderColor = "red";
+      guessInput.style.borderWidth = "2px";
+
+      // Clear the Input
+      guessInput.value = "";
+
+      // // Tell user its the wrong answer
+      setMessage(`${guess} is not correct, ${guessesLeft} guesses left`, "red");
+    }
   }
 });
+
+// Game over
+function gameOver(won, msg) {
+  let color;
+  won === true ? (color = "green") : (color = "red");
+
+  // Disable Input
+  guessInput.disabled = true;
+  // Change the border color
+  guessInput.style.borderColor = color;
+  guessInput.style.borderWidth = "2px";
+  // Change the text color
+  message.style.color = color;
+  // Set the message
+  setMessage(msg);
+}
 
 // Set message
 function setMessage(msg, color) {
