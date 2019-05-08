@@ -12,7 +12,7 @@
 // Game Values
 let min = 1,
   max = 10,
-  winningNum = 2,
+  winningNum = getRandomNum(min, max),
   guessesLeft = 3;
 
 // UI Elements
@@ -34,55 +34,69 @@ guessBtn.addEventListener("click", function() {
   // Validate
   if (isNaN(guess) || guess < min || guess > max) {
     setMessage(`Please enter a number between ${min} and ${max}`, "red");
+  } else {
+    gameLogic();
   }
 
-  // Check if won
-  if (guess === winningNum) {
-    // Game over - Won
-    gameOver(true, `${winningNum} is correct, You WIN the game !!!`);
-    // Disable Input
-    // guessInput.disabled = true;
-    // // Change the border color
-    // guessInput.style.borderColor = "green";
-    // guessInput.style.borderWidth = "2px";
-    // // Set the message
-    // setMessage(`${winningNum} is correct, You WIN the game !!!`, "green");
-  } else {
-    // Wrong number
-    guessesLeft -= 1;
-
-    if (guessesLeft === 0) {
-      // Game over - Lost
-
+  function gameLogic() {
+    // Check if won
+    if (guess === winningNum) {
+      // Game over - Won
+      gameOver(true, `${winningNum} is correct, You WIN the game !!!`);
+      // Disable Input
       // guessInput.disabled = true;
-
       // // Change the border color
-      // guessInput.style.borderColor = "red";
+      // guessInput.style.borderColor = "green";
       // guessInput.style.borderWidth = "2px";
-
       // // Set the message
-      // setMessage(
-      //   `Game Over... You Lost the game. The correct number was ${winningNum}`,
-      //   "red"
-      // );
-
-      gameOver(
-        false,
-        `Game Over... You Lost the game. The correct number was ${winningNum}`
-      );
+      // setMessage(`${winningNum} is correct, You WIN the game !!!`, "green");
     } else {
-      // Game continues -answer wrong
+      // Wrong number
+      guessesLeft -= 1;
 
-      // Change the border color
-      guessInput.style.borderColor = "red";
-      guessInput.style.borderWidth = "2px";
+      if (guessesLeft === 0) {
+        // Game over - Lost
 
-      // Clear the Input
-      guessInput.value = "";
+        // guessInput.disabled = true;
 
-      // // Tell user its the wrong answer
-      setMessage(`${guess} is not correct, ${guessesLeft} guesses left`, "red");
+        // // Change the border color
+        // guessInput.style.borderColor = "red";
+        // guessInput.style.borderWidth = "2px";
+
+        // // Set the message
+        // setMessage(
+        //   `Game Over... You Lost the game. The correct number was ${winningNum}`,
+        //   "red"
+        // );
+
+        gameOver(
+          false,
+          `Game Over... You Lost the game. The correct number was ${winningNum}`
+        );
+      } else {
+        // Game continues -answer wrong
+
+        // Change the border color
+        guessInput.style.borderColor = "red";
+        guessInput.style.borderWidth = "2px";
+
+        // Clear the Input
+        guessInput.value = "";
+
+        // // Tell user its the wrong answer
+        setMessage(
+          `${guess} is not correct, ${guessesLeft} guesses left`,
+          "red"
+        );
+      }
     }
+  }
+});
+
+// Play again - event listener
+game.addEventListener("mousedown", function(e) {
+  if (e.target.className === "play-again") {
+    window.location.reload();
   }
 });
 
@@ -100,6 +114,17 @@ function gameOver(won, msg) {
   message.style.color = color;
   // Set the message
   setMessage(msg);
+
+  // Play Again
+  guessBtn.value = "Play Again?";
+  guessBtn.className += "play-again";
+}
+
+// Get Winning Number
+function getRandomNum(min, max) {
+  let randNum = Math.floor(Math.random() * (max - min + 1) + min);
+  // console.log(randNum)
+  return randNum;
 }
 
 // Set message
